@@ -1,14 +1,36 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import CurrencyRow from './CurrencyRow';
 import './App.css';
 
+const BASE_URL = 'https://api.exchangeratesapi.io/latest';
+
 function App() {
+
+  const [currencyOptions, setCurrencyOptions] = useState([])
+  console.log(currencyOptions);
+
+  useEffect(() => {
+    fetch(BASE_URL)
+      .then(res => res.json())
+      .then(data => {
+        setCurrencyOptions([data.base, ...Object.keys(data.rates)])
+      })
+
+  },[])
+
   return (
     <div className="App">
       <h1> Currency Converter</h1>
-      <CurrencyRow/>
+      
+      <CurrencyRow
+      currencyOptions={currencyOptions}
+      />
+
       <div className="equals" >=</div>
-      <CurrencyRow/>
+
+      <CurrencyRow
+      currencyOptions={currencyOptions}
+      />
     </div>
   );
 }
